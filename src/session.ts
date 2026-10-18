@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { StreamParser, type StreamEvent } from "./stream.js";
 import { injectHarness } from "./harness.js";
+import { inlineIncludes } from "./include.js";
 
 const ROOT = "/tmp/pico8-mcp";
 const HOME = join(ROOT, "home");
@@ -71,8 +72,8 @@ export class Pico8Session {
   }
 
   private async spawnAndWaitBoot(): Promise<void> {
-    // (re-)read the original cart so edits are picked up on reset
-    const text = readFileSync(this.cartPath, "utf8");
+    // (re-)read the original cart (and its #includes) so edits are picked up on reset
+    const text = inlineIncludes(readFileSync(this.cartPath, "utf8"), this.cartPath);
     const injected = injectHarness(text, this.seed);
     mkdirSync(this.workDir, { recursive: true });
     mkdirSync(HOME, { recursive: true });

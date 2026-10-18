@@ -105,9 +105,15 @@ disabled with a warning on stderr and the server keeps working normally.
 - The harness uses GPIO memory (`0x5f80–0x5fff`) as its packet buffer and
   overrides `btn`/`btnp` globals — carts that use GPIO themselves or cache
   `local btn=btn` before the harness loads will misbehave.
+- `#include` lines in `__lua__` are inlined from the original cart's directory
+  before the instrumented copy is written (`.lua`/`.txt`, `.p8` and `.p8:n`;
+  `.p8.png` is not supported). Line numbers in runtime errors therefore refer
+  to the inlined code. `pico8_reset` re-reads included files too.
 
 ## Development
 
 - `npm run build` then `node test/mcp-probe.mjs [cart.p8]` runs an end-to-end
   probe through a real MCP client (boot → play → read → shutdown).
+- `node test/include-probe.mjs` boots the fixture carts in
+  `test/fixtures/include/` to check `#include` handling.
 - `PICO8_BIN` selects an alternative PICO-8 binary.

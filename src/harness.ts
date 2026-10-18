@@ -165,7 +165,7 @@ end
 `;
 }
 
-const SECTION_RE = /^__(gfx|gff|label|map|sfx|music|change_mask|meta:.*)__\s*$/;
+export const SECTION_RE = /^__(gfx|gff|label|map|sfx|music|change_mask|meta:.*)__\s*$/;
 
 /**
  * Inject the harness at the end of the __lua__ section of a .p8 cart.
